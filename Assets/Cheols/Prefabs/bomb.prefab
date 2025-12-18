@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 6074571706435625197}
   - component: {fileID: 7693662367044390738}
   m_Layer: 0
-  m_Name: Item
-  m_TagString: Untagged
+  m_Name: bomb
+  m_TagString: item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 714798c29b7d9fb4cabce1e662b4dd5e, type: 2}
+  - {fileID: 2100000, guid: d681a479e2166cd4aaec8c497c994526, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,4 +119,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSpeed: -0.25
-  itemStatus: 0
+  itemStatus: 2

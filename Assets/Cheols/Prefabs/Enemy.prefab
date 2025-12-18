@@ -218,3 +218,7 @@ MonoBehaviour:
   fireRate: 1
   hp: 2
   maxHp: 2
+  item:
+  - {fileID: 4128716473693625734, guid: 1e06e676fdea6bd4bb9464320852ad0f, type: 3}
+  - {fileID: 4128716473693625734, guid: bd58b412544c7214cb97a6e75874590c, type: 3}
+  - {fileID: 4128716473693625734, guid: 7507dc1fd6594b34983a727ae6a12cac, type: 3}

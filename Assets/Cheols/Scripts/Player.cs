@@ -17,12 +17,25 @@ namespace Cheols
         public GameObject objBullet;
         // 총알이 생성될 위치
         public GameObject BulletPoint;
-        public float hp;
+
+        public GameManager gameManager;
 
         // Start is called before the first frame update
         void Start()
         {
             thisRigi = this.GetComponent<Rigidbody>();
+
+            GameObject gameManagerObject = GameObject.FindGameObjectWithTag("GameManager");
+            if (gameManagerObject != null)
+            {
+                gameManager = gameManagerObject.GetComponent<GameManager>();
+            }
+            if (gameManagerObject == null)
+            {
+                Debug.LogError("gameManger가 존재하지 않습니다.");
+            }
+
+
         }
         private void Move()
         {
@@ -60,13 +73,37 @@ namespace Cheols
                 GameObject bullet = Instantiate(objBullet, BulletPoint.transform.position, this.transform.rotation);
                 bullet.GetComponent<Bullet>().SetBullect(BulletPoint.transform.position + Vector3.forward);
             }
+            if(Input.GetButton("Fire2") && (GameDataManager.Instance.bombtime <= GameDataManager.Instance.bombing)) {
+                if(GameDataManager.Instance.bomb == 0)
+                {
+                    GameDataManager.Instance.isBomb = true;
+                } else
+                {
+                    GameDataManager.Instance.bomb--;
+                    GameDataManager.Instance.bombing = 0;
+                    for(int i = 0; i < gameManager.listEnemys.Count; i++)
+                    {
+                        if (gameManager.listEnemys[i].GetComponent<Enemy>() == null)
+                        {
+                            gameManager.listEnemys[i].GetComponent<Enemy>().hp -= 1;
+                            if (gameManager.listEnemys[i].GetComponent<Enemy>().hp < 0)
+                            {
+
+                                Destroy(gameManager.listEnemys[i].gameObject);
+                            }
+                        }
+                    }
+                }
+
+
+            }
         }
         void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Bullet"))
             {
-                hp -= 1f;
-                if (hp < 1.0f)
+                GameDataManager.Instance.hp -= 1f;
+                if (GameDataManager.Instance.hp < 1.0f)
                 {
                     Destroy(gameObject);
                 }
@@ -74,7 +111,33 @@ namespace Cheols
             }
             else if (other.CompareTag("Enemy"))
             {
-                hp -= 1f;
+                GameDataManager.Instance.hp -= 1f;
+            }
+            if (other.CompareTag("Item"))
+            {
+                switch (other.GetComponent<Item>().itemStatus)
+                {
+                    case ItemStatus.hp:
+                        if(GameDataManager.Instance.hp < GameDataManager.Instance.maxHp)
+                        {
+                            GameDataManager.Instance.hp += 1;
+                        }
+                        break;
+                    case ItemStatus.upgrade:
+                        if (GameDataManager.Instance.upgrade < GameDataManager.Instance.maxUpgrade)
+                        {
+                            GameDataManager.Instance.upgrade++;
+                        }
+                        break;
+                    case ItemStatus.bomb:
+                        if (GameDataManager.Instance.bomb < GameDataManager.Instance.maxBomb)
+                        {
+                            GameDataManager.Instance.bomb++;
+                        }
+                        break;
+                }
+                Destroy(other.gameObject);
+                return;
             }
         }
     }
